@@ -5,5 +5,5 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 
-class BaseFragment(layout: Int) : Fragment(layout) {
+open class BaseFragment(layout: Int) : Fragment(layout) {
 }

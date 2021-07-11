@@ -3,4 +3,8 @@
     <string name="product_image">product image</string>
     <string name="all_categories">All Categories</string>
     <string name="view_more">View More</string>
+    <string name="offers">Offers</string>
+    <string name="fruits">Fruits</string>
+    <string name="drink">Drink</string>
+    <string name="vegetables">Vegetables</string>
 </resources>

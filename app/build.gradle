@@ -81,6 +81,10 @@ dependencies {
     // DataStore
     implementation "androidx.datastore:datastore-preferences:$dataStoreVersion"
 
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
+
 }
 
 kapt {

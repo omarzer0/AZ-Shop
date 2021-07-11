@@ -10,11 +10,12 @@ import kotlinx.parcelize.Parcelize
 data class Product(
     val name: String,
     val description: String,
-    val image: String,
-    val price: Double,
+    val image: Int,
     val category: String,
-    val created: Long = System.currentTimeMillis(),
+    val price: Double,
+    val offerPrice: Double = 0.0,
     val numberOfItemsInCart: Int = 1,
+    val created: Long = System.currentTimeMillis(),
     @PrimaryKey
     val id: Int
 ) : Parcelable

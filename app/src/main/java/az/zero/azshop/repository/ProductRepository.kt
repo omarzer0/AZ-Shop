@@ -1,5 +1,7 @@
 package az.zero.azshop.repository
 
+import az.zero.azshop.R
+import az.zero.azshop.data.Category
 import az.zero.azshop.data.Product
 import az.zero.azshop.dp.ProductDao
 import javax.inject.Inject

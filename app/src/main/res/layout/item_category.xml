@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_item_category"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_margin="16dp"
         app:cardCornerRadius="16dp"
         app:cardMaxElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"

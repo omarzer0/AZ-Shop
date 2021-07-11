@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="az.zero.azshop.ui.home.HomeFragment"
         android:label="home_fragment"
-        tools:layout="@layout/home_fragment" >
+        tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -33,12 +33,12 @@
         android:id="@+id/cartFragment"
         android:name="az.zero.azshop.ui.cart.CartFragment"
         android:label="cart_fragment"
-        tools:layout="@layout/cart_fragment" />
+        tools:layout="@layout/fragment_cart" />
     <fragment
         android:id="@+id/categoryFragment"
         android:name="az.zero.azshop.ui.category.CategoryFragment"
         android:label="category_fragment"
-        tools:layout="@layout/category_fragment" >
+        tools:layout="@layout/fragment_category" >
         <action
             android:id="@+id/action_categoryFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />

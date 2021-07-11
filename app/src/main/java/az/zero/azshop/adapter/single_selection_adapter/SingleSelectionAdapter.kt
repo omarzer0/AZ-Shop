@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import az.zero.azshop.data.Product
-import az.zero.azshop.databinding.ItemProductBinding
+import az.zero.azshop.databinding.ItemSingleSelectionCategoryBinding
 
 /**
  * Simple Adapter to handle single selection on RecyclerView
@@ -20,7 +20,11 @@ class SingleSelectionAdapter :
     private var lastCheckedPosition = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemSingleSelectionCategoryBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ItemViewHolder(binding)
     }
 
@@ -29,7 +33,7 @@ class SingleSelectionAdapter :
         if (currentItem != null) holder.bind(currentItem)
     }
 
-    inner class ItemViewHolder(private val binding: ItemProductBinding) :
+    inner class ItemViewHolder(private val binding: ItemSingleSelectionCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         // add clickListener in init block to limit the number of clickListeners being instantiated
@@ -53,13 +57,14 @@ class SingleSelectionAdapter :
         }
     }
 
-    private fun onSingleItemSelected(binding: ItemProductBinding) = binding.apply {
+    private fun onSingleItemSelected(binding: ItemSingleSelectionCategoryBinding) = binding.apply {
 
     }
 
-    private fun onSingleItemUnSelected(binding: ItemProductBinding) = binding.apply {
+    private fun onSingleItemUnSelected(binding: ItemSingleSelectionCategoryBinding) =
+        binding.apply {
 
-    }
+        }
 
     companion object {
         private val COMPARATOR = object : DiffUtil.ItemCallback<Product>() {
