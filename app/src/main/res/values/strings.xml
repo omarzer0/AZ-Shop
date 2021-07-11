@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">AZ Shop</string>
+    <string name="product_image">product image</string>
+    <string name="all_categories">All Categories</string>
+    <string name="view_more">View More</string>
 </resources>

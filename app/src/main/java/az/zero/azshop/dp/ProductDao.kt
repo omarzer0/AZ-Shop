@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
 
-    @Query("SELECT * FROM product_table")
+    @Query("SELECT * FROM product_table ORDER BY created DESC")
     fun getAllProductsInCart(): Flow<List<Product>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

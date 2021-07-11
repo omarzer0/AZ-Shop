@@ -12,7 +12,8 @@ data class Product(
     val description: String,
     val image: String,
     val price: Double,
-    val relatedItems: List<Product>,
+    val category: String,
+    val created: Long = System.currentTimeMillis(),
     val numberOfItemsInCart: Int = 1,
     @PrimaryKey
     val id: Int
