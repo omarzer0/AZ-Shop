@@ -7,4 +7,6 @@
     <string name="fruits">Fruits</string>
     <string name="drink">Drink</string>
     <string name="vegetables">Vegetables</string>
+    <string name="add_to_cart">Add to Cart</string>
+    <string name="related_items">Related Items</string>
 </resources>
