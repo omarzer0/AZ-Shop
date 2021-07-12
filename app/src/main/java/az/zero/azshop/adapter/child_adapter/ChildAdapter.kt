@@ -1,5 +1,6 @@
 package az.zero.azshop.adapter.child_adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -46,6 +47,8 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
 
         fun bind(currentItem: Product) {
             binding.apply {
+                Log.e("TAG", "bind chhhhhhhhhh: ")
+
                 tvProductItemName.text = currentItem.name
 
                 val offerPrice = currentItem.offerPrice

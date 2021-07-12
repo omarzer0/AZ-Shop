@@ -1,15 +1,20 @@
 package az.zero.azshop.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import az.zero.azshop.R
 import az.zero.azshop.adapter.category_adapter.CategoryAdapter
+import az.zero.azshop.adapter.child_adapter.ChildAdapter
 import az.zero.azshop.adapter.parent_adapter.ParentAdapter
 import az.zero.azshop.databinding.FragmentHomeBinding
 import az.zero.azshop.ui.BaseFragment
+import az.zero.azshop.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(R.layout.fragment_home) {
@@ -21,7 +26,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         val binding = FragmentHomeBinding.bind(view)
 
         val categoryAdapter = CategoryAdapter()
-        val parentAdapter = ParentAdapter()
+        val parentAdapter = ParentAdapter(ChildAdapter())
         binding.apply {
 
             setupCategoryRV(categoryAdapter)
@@ -32,7 +37,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         parentAdapter.submitList(viewModel.getFakeDataForHomeParentItemProduct())
 
         onProductItemClick(parentAdapter)
+        collectProductEvents()
     }
+
 
     private fun FragmentHomeBinding.setupParentRV(parentAdapter: ParentAdapter) {
         rvHomeFragmentParentRv.apply {
@@ -48,9 +55,23 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
     }
 
-    private fun onProductItemClick(parentAdapter: ParentAdapter){
-        parentAdapter.childAdapter.setOnInnerChildProductClickListener {product->
+    private fun onProductItemClick(parentAdapter: ParentAdapter) {
+        parentAdapter.childAdapter.setOnInnerChildProductClickListener { product ->
             viewModel.onProductSelected(product)
+        }
+    }
+
+    private fun collectProductEvents() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.productEvent.collect { event ->
+                when (event) {
+                    is ProductEvent.NavigateToDetailsFragmentWithProduct -> {
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(event.product)
+                        findNavController().navigate(action)
+                    }
+                }.exhaustive
+            }
         }
     }
 }

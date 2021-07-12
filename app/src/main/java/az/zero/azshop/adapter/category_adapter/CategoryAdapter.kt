@@ -1,5 +1,6 @@
 package az.zero.azshop.adapter.category_adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,7 @@ import az.zero.azshop.data.Category
 import az.zero.azshop.databinding.ItemCategoryBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import kotlin.math.log
 
 class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(COMPARATOR) {
 
@@ -34,6 +36,7 @@ class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder
 
         fun bind(currentItem: Category) {
             binding.apply {
+                Log.e("TAG", "bind catttttttt: ")
                 tvCategoryItemName.text = currentItem.name
                 Glide.with(itemView).load(currentItem.image)
                     .transition(DrawableTransitionOptions.withCrossFade())

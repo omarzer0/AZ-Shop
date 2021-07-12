@@ -1,5 +1,6 @@
 package az.zero.azshop.adapter.parent_adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,8 +10,9 @@ import az.zero.azshop.adapter.child_adapter.ChildAdapter
 import az.zero.azshop.data.Parent
 import az.zero.azshop.databinding.ItemParentProductBinding
 
-class ParentAdapter : ListAdapter<Parent, ParentAdapter.ParentAdapterViewHolder>(COMPARATOR) {
-    val childAdapter = ChildAdapter()
+class ParentAdapter(val childAdapter: ChildAdapter) :
+    ListAdapter<Parent, ParentAdapter.ParentAdapterViewHolder>(COMPARATOR) {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentAdapterViewHolder {
         val binding = ItemParentProductBinding.inflate(
@@ -29,6 +31,8 @@ class ParentAdapter : ListAdapter<Parent, ParentAdapter.ParentAdapterViewHolder>
         RecyclerView.ViewHolder(binding.root) {
         fun bind(currentItem: Parent) {
             binding.apply {
+                Log.e("TAG", "bind pppppppppp: ")
+
                 tvItemRvTitle.text = currentItem.name
                 rvItemRvInnerRv.apply {
                     adapter = childAdapter
