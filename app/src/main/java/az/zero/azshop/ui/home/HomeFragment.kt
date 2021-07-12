@@ -1,6 +1,7 @@
 package az.zero.azshop.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import az.zero.azshop.R
@@ -22,18 +23,34 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         val categoryAdapter = CategoryAdapter()
         val parentAdapter = ParentAdapter()
         binding.apply {
-            rvCategory.apply {
-                adapter = categoryAdapter
-                setHasFixedSize(true)
-            }
 
-            rvHomeFragmentParentRv.apply {
-                adapter = parentAdapter
-                setHasFixedSize(true)
-            }
+            setupCategoryRV(categoryAdapter)
+
+            setupParentRV(parentAdapter)
         }
         categoryAdapter.submitList(viewModel.getFakeDataForHomeItemCategory())
         parentAdapter.submitList(viewModel.getFakeDataForHomeParentItemProduct())
 
+        onProductItemClick(parentAdapter)
+    }
+
+    private fun FragmentHomeBinding.setupParentRV(parentAdapter: ParentAdapter) {
+        rvHomeFragmentParentRv.apply {
+            adapter = parentAdapter
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun FragmentHomeBinding.setupCategoryRV(categoryAdapter: CategoryAdapter) {
+        rvCategory.apply {
+            adapter = categoryAdapter
+            setHasFixedSize(true)
+        }
+    }
+
+    private fun onProductItemClick(parentAdapter: ParentAdapter){
+        parentAdapter.childAdapter.setOnInnerChildProductClickListener {product->
+            viewModel.onProductSelected(product)
+        }
     }
 }

@@ -40,6 +40,7 @@ class SingleSelectionAdapter :
         init {
             binding.apply {
 
+                // wrap then into click listener
                 onSingleItemUnSelected(binding)
                 notifyItemChanged(lastCheckedPosition)
                 lastCheckedPosition = adapterPosition

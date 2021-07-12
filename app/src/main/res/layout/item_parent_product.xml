@@ -14,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="@string/fruits"
+        android:layout_marginStart="16dp"
         android:textColor="@color/text_dark_primary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +42,7 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_item_rv_title"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_item_rv_title"
         tools:itemCount="20"
         tools:listitem="@layout/item_child_product" />

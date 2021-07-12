@@ -33,7 +33,15 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-
+            binding.apply {
+                root.setOnClickListener {
+                    checkAdapterPositionAndGetCurrentItem(adapterPosition) { currentProduct ->
+                        onInnerChildProductClickListener?.let {
+                            it(currentProduct)
+                        }
+                    }
+                }
+            }
         }
 
         fun bind(currentItem: Product) {
@@ -52,10 +60,25 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
                     .into(ivProductItemImage)
             }
         }
-
-
     }
 
+    private var onInnerChildProductClickListener: ((Product) -> Unit)? = null
+    fun setOnInnerChildProductClickListener(listener: (Product) -> Unit) {
+        onInnerChildProductClickListener = listener
+    }
+
+
+    /** check if adapterPosition is != -1
+     * and execute the passed listener function [executeListener] as a param */
+    private fun checkAdapterPositionAndGetCurrentItem(
+        adapterPosition: Int, executeListener: (Product) -> Unit
+    ) {
+        val position = adapterPosition
+        if (position != RecyclerView.NO_POSITION) {
+            val currentProduct = getItem(position)
+            executeListener(currentProduct)
+        }
+    }
 
     companion object {
         private val COMPARATOR = object : DiffUtil.ItemCallback<Product>() {
@@ -66,6 +89,4 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
                 oldItem == newItem
         }
     }
-
-
 }

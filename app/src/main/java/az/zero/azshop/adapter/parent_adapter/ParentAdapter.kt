@@ -10,7 +10,7 @@ import az.zero.azshop.data.Parent
 import az.zero.azshop.databinding.ItemParentProductBinding
 
 class ParentAdapter : ListAdapter<Parent, ParentAdapter.ParentAdapterViewHolder>(COMPARATOR) {
-
+    val childAdapter = ChildAdapter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentAdapterViewHolder {
         val binding = ItemParentProductBinding.inflate(
@@ -30,7 +30,6 @@ class ParentAdapter : ListAdapter<Parent, ParentAdapter.ParentAdapterViewHolder>
         fun bind(currentItem: Parent) {
             binding.apply {
                 tvItemRvTitle.text = currentItem.name
-                val childAdapter = ChildAdapter()
                 rvItemRvInnerRv.apply {
                     adapter = childAdapter
                     setHasFixedSize(true)
@@ -51,6 +50,4 @@ class ParentAdapter : ListAdapter<Parent, ParentAdapter.ParentAdapterViewHolder>
                 oldItem == newItem
         }
     }
-
-
 }
