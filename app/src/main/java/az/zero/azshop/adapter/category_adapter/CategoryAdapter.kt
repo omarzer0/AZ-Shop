@@ -36,7 +36,6 @@ class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder
 
         fun bind(currentItem: Category) {
             binding.apply {
-                Log.e("TAG", "bind catttttttt: ")
                 tvCategoryItemName.text = currentItem.name
                 Glide.with(itemView).load(currentItem.image)
                     .transition(DrawableTransitionOptions.withCrossFade())

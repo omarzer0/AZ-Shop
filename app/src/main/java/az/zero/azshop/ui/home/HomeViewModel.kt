@@ -29,12 +29,6 @@ class HomeViewModel @Inject constructor(
     fun onProductSelected(product: Product) = viewModelScope.launch {
         productEventChannel.send(ProductEvent.NavigateToDetailsFragmentWithProduct(product))
     }
-
-    var x = 0
-
-    fun saveDXScrollPosition(dx: Int) {
-        x = dx
-    }
 }
 
 sealed class ProductEvent {

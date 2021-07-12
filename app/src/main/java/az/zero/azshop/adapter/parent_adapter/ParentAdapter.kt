@@ -31,8 +31,6 @@ class ParentAdapter(val childAdapter: ChildAdapter) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(currentItem: Parent) {
             binding.apply {
-                Log.e("TAG", "bind pppppppppp: ")
-
                 tvItemRvTitle.text = currentItem.name
                 rvItemRvInnerRv.apply {
                     adapter = childAdapter

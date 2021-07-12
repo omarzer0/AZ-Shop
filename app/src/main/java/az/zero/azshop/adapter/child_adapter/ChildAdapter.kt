@@ -47,7 +47,6 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
 
         fun bind(currentItem: Product) {
             binding.apply {
-                Log.e("TAG", "bind chhhhhhhhhh: ")
 
                 tvProductItemName.text = currentItem.name
 
