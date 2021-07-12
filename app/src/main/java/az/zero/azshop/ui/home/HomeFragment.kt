@@ -37,6 +37,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         parentAdapter.submitList(viewModel.getFakeDataForHomeParentItemProduct())
 
         onProductItemClick(parentAdapter)
+        onViewMoreClick(parentAdapter)
         collectProductEvents()
     }
 
@@ -61,6 +62,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         }
     }
 
+    private fun onViewMoreClick(parentAdapter: ParentAdapter) {
+        parentAdapter.setOnInnerChildViewAllCategoryClickListener {
+            viewModel.onViewMoreSelected(viewModel.getFakeDataForHomeParentItemProduct())
+        }
+    }
+
     private fun collectProductEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.productEvent.collect { event ->
@@ -68,6 +75,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                     is ProductEvent.NavigateToDetailsFragmentWithProduct -> {
                         val action =
                             HomeFragmentDirections.actionHomeFragmentToDetailsFragment(event.product)
+                        findNavController().navigate(action)
+                    }
+                    is ProductEvent.NavigateToCategoryFragmentWithListCategoryAndNames -> {
+                        val action = HomeFragmentDirections.actionHomeFragmentToCategoryFragment(
+                            event.categoriesAndNames.toTypedArray()
+                        )
                         findNavController().navigate(action)
                     }
                 }.exhaustive

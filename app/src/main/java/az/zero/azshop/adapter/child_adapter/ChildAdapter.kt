@@ -1,6 +1,5 @@
 package az.zero.azshop.adapter.child_adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -36,9 +35,9 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
         init {
             binding.apply {
                 root.setOnClickListener {
-                    checkAdapterPositionAndGetCurrentItem(adapterPosition) { currentProduct ->
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
                         onInnerChildProductClickListener?.let {
-                            it(currentProduct)
+                            it(getItem(adapterPosition))
                         }
                     }
                 }
@@ -67,19 +66,6 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
     private var onInnerChildProductClickListener: ((Product) -> Unit)? = null
     fun setOnInnerChildProductClickListener(listener: (Product) -> Unit) {
         onInnerChildProductClickListener = listener
-    }
-
-
-    /** check if adapterPosition is != -1
-     * and execute the passed listener function [executeListener] as a param */
-    private fun checkAdapterPositionAndGetCurrentItem(
-        adapterPosition: Int, executeListener: (Product) -> Unit
-    ) {
-        val position = adapterPosition
-        if (position != RecyclerView.NO_POSITION) {
-            val currentProduct = getItem(position)
-            executeListener(currentProduct)
-        }
     }
 
     companion object {

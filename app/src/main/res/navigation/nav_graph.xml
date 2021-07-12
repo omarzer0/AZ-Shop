@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="az.zero.azshop.ui.home.HomeFragment"
-        android:label="home_fragment"
-        tools:layout="@layout/fragment_home" >
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
@@ -23,8 +23,8 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="az.zero.azshop.ui.details.DetailsFragment"
-        android:label="details_fragment"
-        tools:layout="@layout/details_fragment" >
+        android:label="Details"
+        tools:layout="@layout/fragment_datails">
         <argument
             android:name="product"
             app:argType="az.zero.azshop.data.Product" />
@@ -32,15 +32,18 @@
     <fragment
         android:id="@+id/cartFragment"
         android:name="az.zero.azshop.ui.cart.CartFragment"
-        android:label="cart_fragment"
+        android:label="Cart"
         tools:layout="@layout/fragment_cart" />
     <fragment
         android:id="@+id/categoryFragment"
         android:name="az.zero.azshop.ui.category.CategoryFragment"
-        android:label="category_fragment"
-        tools:layout="@layout/fragment_category" >
+        android:label="Category"
+        tools:layout="@layout/fragment_category">
         <action
             android:id="@+id/action_categoryFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <argument
+            android:name="categoriesAndNames"
+            app:argType="az.zero.azshop.data.Parent[]" />
     </fragment>
 </navigation>

@@ -20,19 +20,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
-        android:id="@+id/tv_item_rv_view_more"
+        android:id="@+id/tv_item_rv_view_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="@string/view_more"
+        android:text="@string/view_all"
         android:textColor="@color/text_dark_secondary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_rv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_rv_title" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_item_rv_inner_rv"

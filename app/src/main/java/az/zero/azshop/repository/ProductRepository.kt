@@ -19,7 +19,6 @@ class ProductRepository @Inject constructor(
 
     // TODO 2: use custom application scope to run delete all (to insure not interruption)
 
-
     fun getFakeDataForHomeItemCategory(): List<Category> =
         List(100) {
             Category("Item $it", R.drawable.lavender)
@@ -39,7 +38,7 @@ class ProductRepository @Inject constructor(
         }
 
     fun getFakeDataForHomeParentItemProduct(): List<Parent> =
-        List(4) {
+        List(10) {
             Parent(
                 "Item $it",
                 getFakeDataForHomeItemProduct()

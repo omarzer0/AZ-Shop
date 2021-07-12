@@ -29,6 +29,17 @@ class ParentAdapter(val childAdapter: ChildAdapter) :
 
     inner class ParentAdapterViewHolder(private val binding: ItemParentProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                tvItemRvViewAll.setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        onInnerChildViewAllCategoryClickListener?.let { it() }
+                    }
+                }
+            }
+        }
+
         fun bind(currentItem: Parent) {
             binding.apply {
                 tvItemRvTitle.text = currentItem.name
@@ -41,6 +52,11 @@ class ParentAdapter(val childAdapter: ChildAdapter) :
             }
         }
 
+    }
+
+    private var onInnerChildViewAllCategoryClickListener: (() -> Unit)? = null
+    fun setOnInnerChildViewAllCategoryClickListener(listener: () -> Unit) {
+        onInnerChildViewAllCategoryClickListener = listener
     }
 
     companion object {
