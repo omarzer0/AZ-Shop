@@ -18,5 +18,5 @@ class CartViewModel @Inject constructor(
         productRepository.deleteProduct(product)
     }
 
-    private fun getAllProductsInCart() = productRepository.getAllProductsInCart().asLiveData()
+    fun getAllProductsInCart() = productRepository.getAllProductsInCart().asLiveData()
 }

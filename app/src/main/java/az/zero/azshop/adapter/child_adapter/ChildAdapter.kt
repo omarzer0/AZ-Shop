@@ -6,20 +6,27 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import az.zero.azshop.R
 import az.zero.azshop.data.Product
+import az.zero.azshop.databinding.ItemCartBinding
 import az.zero.azshop.databinding.ItemChildProductBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import java.lang.String.valueOf
 
-class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(COMPARATOR) {
+class ChildAdapter(private val inCartFragment: Boolean) :
+    ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(COMPARATOR) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildAdapterViewHolder {
-        val binding = ItemChildProductBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
+        val binding = if (inCartFragment) {
+            ItemCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        } else {
+            ItemChildProductBinding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+        }
         return ChildAdapterViewHolder(binding)
     }
 
@@ -29,15 +36,34 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
     }
 
 
-    inner class ChildAdapterViewHolder(private val binding: ItemChildProductBinding) :
+    inner class ChildAdapterViewHolder(private val binding: ViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.apply {
-                root.setOnClickListener {
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        onInnerChildProductClickListener?.let {
-                            it(getItem(adapterPosition))
+            when (binding) {
+                is ItemChildProductBinding ->
+                    binding.apply {
+                        root.setOnClickListener {
+                            if (adapterPosition != RecyclerView.NO_POSITION) {
+                                onInnerChildProductClickListener?.let {
+                                    it(getItem(adapterPosition))
+                                }
+                            }
+                        }
+                    }
+
+                is ItemCartBinding -> {
+                    binding.apply {
+                        root.setOnClickListener {
+                            if (adapterPosition != RecyclerView.NO_POSITION) {
+                                onCartBodyClickListener?.let { it(getItem(adapterPosition)) }
+                            }
+                        }
+
+                        btnRemoveProduct.setOnClickListener {
+                            if (adapterPosition != RecyclerView.NO_POSITION) {
+                                onCartDeleteProductClickListener?.let { it(getItem(adapterPosition)) }
+                            }
                         }
                     }
                 }
@@ -45,20 +71,38 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
         }
 
         fun bind(currentItem: Product) {
-            binding.apply {
+            when (binding) {
+                is ItemChildProductBinding ->
+                    binding.apply {
+                        tvProductItemName.text = currentItem.name
 
-                tvProductItemName.text = currentItem.name
+                        val offerPrice = currentItem.offerPrice
+                        tvProductItemPrice.isVisible = offerPrice == 0.0
+                        tvProductItemPrice.text = valueOf("$${currentItem.price}")
 
-                val offerPrice = currentItem.offerPrice
-                tvProductItemPrice.isVisible = offerPrice == 0.0
-                tvProductItemPrice.text = valueOf("$${currentItem.price}")
+                        tvOfferPrice.isVisible = offerPrice != 0.0
+                        tvOfferPrice.text = valueOf("$$offerPrice")
 
-                tvProductItemDiscountPrice.isVisible = offerPrice != 0.0
-                tvProductItemDiscountPrice.text = valueOf("$$offerPrice")
+                        Glide.with(itemView).load(currentItem.image).error(R.drawable.ic_no_image)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(ivProductItemImage)
+                    }
 
-                Glide.with(itemView).load(currentItem.image).error(R.drawable.ic_no_image)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(ivProductItemImage)
+                is ItemCartBinding -> {
+                    binding.apply {
+                        tvProductItemName.text = currentItem.name
+                        Glide.with(itemView).load(currentItem.image).into(ivProductItemImage)
+
+                        val offerPrice = currentItem.offerPrice
+                        tvProductItemPrice.isVisible = offerPrice == 0.0
+                        tvProductItemPrice.text = valueOf("$${currentItem.price}")
+
+                        tvOfferPrice.isVisible = offerPrice != 0.0
+                        tvOfferPrice.text = valueOf("$$offerPrice")
+
+                        tvNumberOfItemsInCart.text = "x${currentItem.numberOfItemsInCart}"
+                    }
+                }
             }
         }
     }
@@ -66,6 +110,16 @@ class ChildAdapter : ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(C
     private var onInnerChildProductClickListener: ((Product) -> Unit)? = null
     fun setOnInnerChildProductClickListener(listener: (Product) -> Unit) {
         onInnerChildProductClickListener = listener
+    }
+
+    private var onCartBodyClickListener: ((Product) -> Unit)? = null
+    fun setOnCartBodyClickListener(listener: (Product) -> Unit) {
+        onCartBodyClickListener = listener
+    }
+
+    private var onCartDeleteProductClickListener: ((Product) -> Unit)? = null
+    fun setOnCartDeleteProductClickListener(listener: (Product) -> Unit) {
+        onCartDeleteProductClickListener = listener
     }
 
     companion object {

@@ -32,8 +32,7 @@ class ProductRepository @Inject constructor(
                 R.drawable.lavender,
                 "fruits",
                 12.0,
-                0.0,
-                id = it
+                0.0
             )
         }
 

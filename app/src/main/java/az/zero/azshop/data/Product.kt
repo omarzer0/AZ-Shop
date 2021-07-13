@@ -14,8 +14,8 @@ data class Product(
     val category: String,
     val price: Double,
     val offerPrice: Double = 0.0,
-    val numberOfItemsInCart: Int = 1,
-    val created: Long = System.currentTimeMillis(),
-    @PrimaryKey
-    val id: Int
+    var numberOfItemsInCart: Int = 1,
+    var created: Long = System.currentTimeMillis(),
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null
 ) : Parcelable

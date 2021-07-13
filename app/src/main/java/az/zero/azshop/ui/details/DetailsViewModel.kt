@@ -1,8 +1,10 @@
 package az.zero.azshop.ui.details
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import az.zero.azshop.R
 import az.zero.azshop.data.Product
 import az.zero.azshop.repository.ProductRepository
 import az.zero.azshop.utils.*
@@ -16,22 +18,28 @@ class DetailsViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : ViewModel() {
 
-    val product = state.get<Product>(PRODUCT_ID)
+    // the id must be the same as the args name in navGraph
+    var product = state.get<Product>(PRODUCT_ID)
 
+    var isAddNotEdit = state.get<Boolean>(IS_ADD_NOT_EDIT) ?: true
+        set(value) {
+            field = value
+            state.set(IS_ADD_NOT_EDIT, value)
+        }
 
-    var name = state.get<String>(NAME) ?: product?.name ?: ""
+    var name = state.get<String>(NAME) ?: product?.name ?: "No name"
         set(value) {
             field = value
             state.set(NAME, value)
         }
 
-    var description = state.get<String>(DISCRIPTION) ?: product?.description ?: ""
+    var description = state.get<String>(DISCRIPTION) ?: product?.description ?: "No description"
         set(value) {
             field = value
             state.set(DISCRIPTION, value)
         }
 
-    var image = state.get<Int>(IMAGE) ?: product?.image ?: -1
+    var image = state.get<Int>(IMAGE) ?: product?.image ?: R.drawable.ic_no_image
         set(value) {
             field = value
             state.set(IMAGE, value)
@@ -62,17 +70,7 @@ class DetailsViewModel @Inject constructor(
             state.set(NUMBER_OF_ITEMS_IN_CART, value)
         }
 
-    var created = state.get<Long>(CREATED) ?: product?.created ?: System.currentTimeMillis()
-        set(value) {
-            field = value
-            state.set(CREATED, value)
-        }
-
-    var id = state.get<Int>(ID) ?: product?.id ?: 1
-        set(value) {
-            field = value
-            state.set(ID, value)
-        }
+    val numberOfItemsInCartObserver = MutableLiveData(numberOfItemsInCart)
 
     private fun insertProduct(product: Product) = viewModelScope.launch {
         productRepository.insertProduct(product)
@@ -82,4 +80,25 @@ class DetailsViewModel @Inject constructor(
         productRepository.updateProduct(product)
     }
 
+    fun onPlusBtnClick() {
+        numberOfItemsInCart++
+        product?.numberOfItemsInCart = numberOfItemsInCart
+        numberOfItemsInCartObserver.postValue(numberOfItemsInCart)
+    }
+
+    fun onMinusBtnClick() {
+        if (numberOfItemsInCart > 1) {
+            numberOfItemsInCart--
+            product?.numberOfItemsInCart = numberOfItemsInCart
+            numberOfItemsInCartObserver.postValue(numberOfItemsInCart)
+        }
+    }
+
+    fun onAddOrEditProductToCartClick() {
+        product?.let { product ->
+            product.created = System.currentTimeMillis()
+            if (isAddNotEdit) insertProduct(product)
+            else updateProduct(product)
+        }
+    }
 }

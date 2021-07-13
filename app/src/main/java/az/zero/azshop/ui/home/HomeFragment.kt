@@ -26,12 +26,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         val binding = FragmentHomeBinding.bind(view)
 
         val categoryAdapter = CategoryAdapter()
-        val parentAdapter = ParentAdapter(ChildAdapter())
+        val parentAdapter = ParentAdapter(ChildAdapter(false))
         binding.apply {
 
             setupCategoryRV(categoryAdapter)
 
             setupParentRV(parentAdapter)
+
+            btnOpenCart.setOnClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
+                findNavController().navigate(action)
+            }
         }
         categoryAdapter.submitList(viewModel.getFakeDataForHomeItemCategory())
         parentAdapter.submitList(viewModel.getFakeDataForHomeParentItemProduct())
@@ -74,7 +79,7 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 when (event) {
                     is ProductEvent.NavigateToDetailsFragmentWithProduct -> {
                         val action =
-                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(event.product)
+                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(event.product,true)
                         findNavController().navigate(action)
                     }
                     is ProductEvent.NavigateToCategoryFragmentWithListCategoryAndNames -> {

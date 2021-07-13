@@ -12,6 +12,14 @@
         android:layout_height="0dp"
         android:background="@color/app_background_color">
 
+        <Button
+            android:id="@+id/btn_open_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="open cart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_title1"
             android:layout_width="wrap_content"
@@ -41,9 +49,9 @@
             android:id="@+id/tv_title2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:text="@string/offers"
-            android:layout_marginStart="16dp"
             android:textColor="@color/main_color"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/rv_category"

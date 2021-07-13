@@ -28,12 +28,18 @@
         <argument
             android:name="product"
             app:argType="az.zero.azshop.data.Product" />
+        <argument android:name="isAddNotEdit"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="az.zero.azshop.ui.cart.CartFragment"
         android:label="Cart"
-        tools:layout="@layout/fragment_cart" />
+        tools:layout="@layout/fragment_cart" >
+        <action
+            android:id="@+id/action_cartFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/categoryFragment"
         android:name="az.zero.azshop.ui.category.CategoryFragment"
