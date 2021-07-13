@@ -3,12 +3,15 @@ package az.zero.azshop.ui.details
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import az.zero.azshop.R
 import az.zero.azshop.databinding.FragmentDatailsBinding
 import az.zero.azshop.ui.BaseFragment
+import az.zero.azshop.utils.exhaustive
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment(R.layout.fragment_datails) {
@@ -25,6 +28,11 @@ class DetailsFragment : BaseFragment(R.layout.fragment_datails) {
             btnAddToCart.setOnClickListener { viewModel.onAddOrEditProductToCartClick() }
         }
 
+        observeNumberOdItems(binding)
+        collectDetailsEvents()
+    }
+
+    private fun observeNumberOdItems(binding: FragmentDatailsBinding) {
         viewModel.numberOfItemsInCartObserver.observe(viewLifecycleOwner, {
             binding.tvQuantity.text = "${viewModel.numberOfItemsInCart}"
         })
@@ -41,4 +49,13 @@ class DetailsFragment : BaseFragment(R.layout.fragment_datails) {
         else getString(R.string.edit_product_in_cart)
     }
 
+    private fun collectDetailsEvents() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.detailsEvent.collect { event ->
+                when (event) {
+                    DetailFragmentEvent.NavigateBack -> findNavController().popBackStack()
+                }.exhaustive
+            }
+        }
+    }
 }

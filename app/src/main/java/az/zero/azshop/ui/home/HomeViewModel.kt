@@ -32,7 +32,11 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onViewMoreSelected(categoriesAndNames: List<Parent>) = viewModelScope.launch {
-        productEventChannel.send(ProductEvent.NavigateToCategoryFragmentWithListCategoryAndNames(categoriesAndNames))
+        productEventChannel.send(
+            ProductEvent.NavigateToCategoryFragmentWithListCategoryAndNames(
+                categoriesAndNames
+            )
+        )
     }
 }
 

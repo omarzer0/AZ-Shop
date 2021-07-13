@@ -9,6 +9,8 @@ import az.zero.azshop.data.Product
 import az.zero.azshop.repository.ProductRepository
 import az.zero.azshop.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +19,8 @@ class DetailsViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
+    private val detailsEventChannel = Channel<DetailFragmentEvent>()
+    val detailsEvent = detailsEventChannel.receiveAsFlow()
 
     // the id must be the same as the args name in navGraph
     var product = state.get<Product>(PRODUCT_ID)
@@ -96,9 +100,16 @@ class DetailsViewModel @Inject constructor(
 
     fun onAddOrEditProductToCartClick() {
         product?.let { product ->
-            product.created = System.currentTimeMillis()
             if (isAddNotEdit) insertProduct(product)
             else updateProduct(product)
+
+            viewModelScope.launch {
+                detailsEventChannel.send(DetailFragmentEvent.NavigateBack)
+            }
         }
     }
+}
+
+sealed class DetailFragmentEvent {
+    object NavigateBack : DetailFragmentEvent()
 }
