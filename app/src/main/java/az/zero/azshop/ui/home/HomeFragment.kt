@@ -2,13 +2,15 @@ package az.zero.azshop.ui.home
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import az.zero.azshop.R
 import az.zero.azshop.adapter.category_adapter.CategoryAdapter
 import az.zero.azshop.adapter.child_adapter.ChildAdapter
-import az.zero.azshop.adapter.parent_adapter.ParentAdapter
+import az.zero.azshop.adapter.child_adapter.OnProductItemClickLister
+import az.zero.azshop.data.Product
 import az.zero.azshop.databinding.FragmentHomeBinding
 import az.zero.azshop.ui.BaseFragment
 import az.zero.azshop.utils.exhaustive
@@ -17,7 +19,7 @@ import kotlinx.coroutines.flow.collect
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment(R.layout.fragment_home) {
+class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLister {
 
     private val viewModel: HomeViewModel by viewModels()
 
@@ -26,52 +28,79 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
         val binding = FragmentHomeBinding.bind(view)
 
         val categoryAdapter = CategoryAdapter()
-        val parentAdapter = ParentAdapter(ChildAdapter(false))
+        // removed nestedRecyclerView duo to saving RV position and child RVs after navigating
+        val forYouAdapter = ChildAdapter()
+        val offerAdapter = ChildAdapter()
+        val popularAdapter = ChildAdapter()
+        addListenersToAdapters(forYouAdapter, offerAdapter, popularAdapter)
+
         binding.apply {
 
-            setupCategoryRV(categoryAdapter)
-
-            setupParentRV(parentAdapter)
-
+            setUpRVs(categoryAdapter, forYouAdapter, offerAdapter, popularAdapter)
+            addListenersToViewAllTVs(tvForYouViewAll, tvOfferViewAll, tvPopularViewAll)
             btnOpenCart.setOnClickListener {
                 val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
                 findNavController().navigate(action)
             }
         }
-        categoryAdapter.submitList(viewModel.getFakeDataForHomeItemCategory())
-        parentAdapter.submitList(viewModel.getFakeDataForHomeParentItemProduct())
+        submitAdaptersLists(categoryAdapter, forYouAdapter, offerAdapter, popularAdapter)
 
-        onProductItemClick(parentAdapter)
-        onViewMoreClick(parentAdapter)
         collectProductEvents()
-    }
+        forYouAdapter.setOnCartBodyClickListener {
 
-
-    private fun FragmentHomeBinding.setupParentRV(parentAdapter: ParentAdapter) {
-        rvHomeFragmentParentRv.apply {
-            adapter = parentAdapter
-            setHasFixedSize(true)
         }
     }
 
-    private fun FragmentHomeBinding.setupCategoryRV(categoryAdapter: CategoryAdapter) {
+    private fun addListenersToViewAllTVs(vararg tvs: TextView) {
+        for (tv in tvs) {
+            tv.setOnClickListener {
+                viewModel.onViewAllClick()
+            }
+        }
+    }
+
+    private fun addListenersToAdapters(vararg adapters: ChildAdapter) {
+        for (adapter in adapters) {
+            adapter.initOnProductItemClickLister(this)
+        }
+    }
+
+    private fun submitAdaptersLists(
+        categoryAdapter: CategoryAdapter,
+        forYouAdapter: ChildAdapter,
+        offerAdapter: ChildAdapter,
+        popularAdapter: ChildAdapter
+    ) {
+        categoryAdapter.submitList(viewModel.getFakeDataForHomeItemCategory())
+        forYouAdapter.submitList(viewModel.getFakeDataForHomeItemProduct())
+        offerAdapter.submitList(viewModel.getFakeDataForHomeItemProduct())
+        popularAdapter.submitList(viewModel.getFakeDataForHomeItemProduct())
+    }
+
+    private fun FragmentHomeBinding.setUpRVs(
+        categoryAdapter: CategoryAdapter,
+        forYouAdapter: ChildAdapter,
+        offerAdapter: ChildAdapter,
+        popularAdapter: ChildAdapter
+    ) {
         rvCategory.apply {
             adapter = categoryAdapter
             setHasFixedSize(true)
         }
-    }
-
-    private fun onProductItemClick(parentAdapter: ParentAdapter) {
-        parentAdapter.childAdapter.setOnInnerChildProductClickListener { product ->
-            viewModel.onProductSelected(product)
+        rvForYou.apply {
+            adapter = forYouAdapter
+            setHasFixedSize(true)
+        }
+        rvOffer.apply {
+            adapter = offerAdapter
+            setHasFixedSize(true)
+        }
+        rvPopular.apply {
+            adapter = popularAdapter
+            setHasFixedSize(true)
         }
     }
 
-    private fun onViewMoreClick(parentAdapter: ParentAdapter) {
-        parentAdapter.setOnInnerChildViewAllCategoryClickListener {
-            viewModel.onViewMoreSelected(viewModel.getFakeDataForHomeParentItemProduct())
-        }
-    }
 
     private fun collectProductEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -79,17 +108,22 @@ class HomeFragment : BaseFragment(R.layout.fragment_home) {
                 when (event) {
                     is ProductEvent.NavigateToDetailsFragmentWithProduct -> {
                         val action =
-                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(event.product,true)
+                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+                                event.product,
+                                true
+                            )
                         findNavController().navigate(action)
                     }
                     is ProductEvent.NavigateToCategoryFragmentWithListCategoryAndNames -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToCategoryFragment(
-                            event.categoriesAndNames.toTypedArray()
-                        )
+                        val action = HomeFragmentDirections.actionHomeFragmentToCategoryFragment()
                         findNavController().navigate(action)
                     }
                 }.exhaustive
             }
         }
+    }
+
+    override fun onProductClick(product: Product) {
+        viewModel.onProductSelected(product)
     }
 }

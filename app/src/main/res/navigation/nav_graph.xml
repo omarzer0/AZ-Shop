@@ -48,8 +48,5 @@
         <action
             android:id="@+id/action_categoryFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
-        <argument
-            android:name="categoriesAndNames"
-            app:argType="az.zero.azshop.data.Parent[]" />
     </fragment>
 </navigation>
