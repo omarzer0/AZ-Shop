@@ -72,18 +72,9 @@ class ProductRepository @Inject constructor(
     fun getFakeDataForElectronics(): List<Product> = listOf(
         Product("Hp Laptop", "Hp original laptop", R.drawable.laptop1, "Laptop", 120.0, 0.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.laptop2, "Laptop", 130.0, 0.0),
-//        Product("Hp Laptop", "Hp original laptop", R.drawable.laptop3, "Laptop", 160.0, 140.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.laptop4, "Laptop", 135.0, 0.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.tablet22, "Laptop", 135.0, 0.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.tablet11, "Laptop", 135.0, 0.0),
-//        Product(
-//            "Gaming Laptop",
-//            "Laptop for smooth gaming experience",
-//            R.drawable.laptop5,
-//            "Laptop",
-//            300.0,
-//            0.0
-//        )
     )
 
     fun getForYou(): List<Product> = listOf(
@@ -92,13 +83,12 @@ class ProductRepository @Inject constructor(
         Product("Banana Crepe", "Tasty Crepe", R.drawable.crepe1, "Crepe", 9.0, 0.0),
         Product("Cheese Pasta", "Tasty Pasta with", R.drawable.pasta2, "Pasta", 16.0, 14.0),
         Product("Big Slice Pizza", "Tasty Pizza", R.drawable.pizza2, "Pizza", 36.0, 26.0),
-//        Product("Hp Laptop", "Hp original laptop", R.drawable.laptop3, "Laptop", 160.0, 140.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.laptop2, "Laptop", 130.0, 0.0),
         Product("Strawberry Crepe", "Tasty Crepe", R.drawable.crepe2, "Crepe", 8.0, 0.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.laptop2, "Laptop", 130.0, 0.0),
         Product("Sauce Fries", "Tasty Fries", R.drawable.fries2, "Fries", 3.0, 0.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.laptop2, "Laptop", 130.0, 0.0),
-        )
+    )
 
     fun getOffers(): List<Product> = listOf(
         Product("State Burger", "Tasty burger with cheese", R.drawable.burger4, "Burger", 7.0, 5.0),
@@ -114,7 +104,6 @@ class ProductRepository @Inject constructor(
         Product("State Burger", "Tasty burger with cheese", R.drawable.burger4, "Burger", 7.0, 5.0),
         Product("Beef Burger", "Tasty burger with cheese", R.drawable.burger2, "Burger", 6.0, 0.0),
         Product("State Burger", "Tasty burger with cheese", R.drawable.burger4, "Burger", 7.0, 5.0),
-//        Product("Hp Laptop", "Hp original laptop", R.drawable.laptop3, "Laptop", 160.0, 140.0),
         Product("Hp Laptop", "Hp original laptop", R.drawable.laptop2, "Laptop", 130.0, 0.0),
         Product("Sauce Fries", "Tasty Fries", R.drawable.fries2, "Fries", 3.0, 1.5),
         Product("Cheese Pasta", "Tasty Pasta with", R.drawable.pasta2, "Pasta", 16.0, 14.0),
