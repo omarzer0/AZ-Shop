@@ -40,18 +40,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
         initAdapters()
         addAdaptersListener()
         bindViews()
-//        observeNumberOfItemsInCart(tvNumberOfItemsInCart)
         submitAdaptersLists(categoryAdapter, forYouAdapter, offerAdapter, popularAdapter)
         collectProductEvents()
     }
-//
-//    private fun observeNumberOfItemsInCart(tvNumberOfItemsInCart: TextView) {
-//        viewModel.getNumberOfItemsInCart().observe(viewLifecycleOwner, { numberOfItemsInCart ->
-//            tvNumberOfItemsInCart.text = "$numberOfItemsInCart"
-//            tvNumberOfItemsInCart.isVisible =
-//                (numberOfItemsInCart != null && numberOfItemsInCart > 0)
-//        })
-//    }
 
     private fun initAdapters() {
         categoryAdapter = CategoryAdapter()
@@ -97,9 +88,9 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
         popularAdapter: ChildAdapter
     ) {
         categoryAdapter.submitList(viewModel.getFakeDataForHomeItemCategory())
-        forYouAdapter.submitList(viewModel.getFakeDataForHomeItemProduct())
-        offerAdapter.submitList(viewModel.getFakeDataForHomeItemProduct())
-        popularAdapter.submitList(viewModel.getFakeDataForHomeItemProduct())
+        forYouAdapter.submitList(viewModel.getForYouData())
+        offerAdapter.submitList(viewModel.getOfferData())
+        popularAdapter.submitList(viewModel.getPopularData())
     }
 
     private fun FragmentHomeBinding.setUpRVs(
