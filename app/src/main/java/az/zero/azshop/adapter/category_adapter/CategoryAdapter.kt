@@ -10,9 +10,7 @@ import az.zero.azshop.databinding.ItemCategoryBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 
-
 class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(COMPARATOR) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val binding = ItemCategoryBinding.inflate(
@@ -25,7 +23,6 @@ class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder
         val currentItem = getItem(position)
         holder.bind(currentItem)
     }
-
 
     inner class CategoryViewHolder(private val binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {

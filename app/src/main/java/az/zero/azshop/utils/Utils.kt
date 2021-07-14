@@ -1,9 +1,12 @@
 package az.zero.azshop.utils
 
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.util.TypedValue
 import android.view.View
+import androidx.appcompat.app.ActionBar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 
 
 /**
@@ -40,4 +43,23 @@ fun setLayoutMargin(
     params.marginStart = convertDpToPx(context, marginStart)
     params.marginEnd = convertDpToPx(context, marginEnd)
     view.layoutParams = params
+}
+
+// removed if not need
+fun changeActionBarColor(
+    color: Int,
+    removeElevation: Boolean,
+    supportActionBar: ActionBar?,
+    context: Context
+) {
+    val elevation = supportActionBar?.elevation
+    supportActionBar?.setBackgroundDrawable(
+        ColorDrawable(ContextCompat.getColor(context, color))
+    )
+    supportActionBar?.elevation = if (removeElevation)
+        0f
+    else {
+        elevation ?: 8f
+    }
+
 }

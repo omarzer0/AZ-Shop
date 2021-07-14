@@ -1,6 +1,7 @@
 package az.zero.azshop.ui.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import az.zero.azshop.data.Product
 import az.zero.azshop.repository.ProductRepository
@@ -12,16 +13,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val productRepository: ProductRepository
+    private val homeRepository: ProductRepository
 ) : ViewModel() {
 
     private val productEventChannel = Channel<HomeFragmentEvent>()
     val productEvent = productEventChannel.receiveAsFlow()
 
+    fun getNumberOfItemsInCart() = homeRepository.getNumberOfItemsInCart().asLiveData()
 
-    fun getFakeDataForHomeItemCategory() = productRepository.getFakeDataForHomeItemCategory()
+    fun getFakeDataForHomeItemCategory() = homeRepository.getFakeDataForHomeItemCategory()
 
-    fun getFakeDataForHomeItemProduct() = productRepository.getFakeDataForHomeItemProduct(0)
+    fun getFakeDataForHomeItemProduct() = homeRepository.getFakeDataForHomeItemProduct(0)
 
     fun onProductClicked(product: Product) = viewModelScope.launch {
         productEventChannel.send(HomeFragmentEvent.NavigateToDetailsFragmentWithHomeFragment(product))
@@ -38,13 +40,14 @@ class HomeViewModel @Inject constructor(
             HomeFragmentEvent.NavigateToCategoryFragment(position)
         )
     }
+
+    fun cartImageClicked() = viewModelScope.launch {
+        productEventChannel.send(HomeFragmentEvent.NavigateToCartFragment)
+    }
 }
 
 sealed class HomeFragmentEvent {
-    /* we need not to pass anything so we use object for better performance
-       (can also use data class with no args)*/
     data class NavigateToDetailsFragmentWithHomeFragment(val product: Product) : HomeFragmentEvent()
-//    data class NavigateToDetailsFragmentWithHomeFragment(val product: Product) : HomeFragmentEvent()
-    data class NavigateToCategoryFragment(val position:Int) : HomeFragmentEvent()
-
+    data class NavigateToCategoryFragment(val position: Int) : HomeFragmentEvent()
+    object NavigateToCartFragment : HomeFragmentEvent()
 }
