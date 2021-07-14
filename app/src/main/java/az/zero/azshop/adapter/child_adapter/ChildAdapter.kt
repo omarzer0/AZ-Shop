@@ -15,9 +15,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import java.lang.String.valueOf
 
-class ChildAdapter(private val inCartFragment: Boolean) :
+class ChildAdapter(
+    private val inCartFragment: Boolean = false,
+    private val needsMatchParent: Boolean = false
+) :
     ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(COMPARATOR) {
+    private var listener: OnProductItemClickLister? = null
 
+    fun initOnProductItemClickLister(listener: OnProductItemClickLister) {
+        this.listener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildAdapterViewHolder {
         val binding = if (inCartFragment) {
@@ -45,10 +52,12 @@ class ChildAdapter(private val inCartFragment: Boolean) :
                     binding.apply {
                         root.setOnClickListener {
                             if (adapterPosition != RecyclerView.NO_POSITION) {
-                                onInnerChildProductClickListener?.let {
-                                    it(getItem(adapterPosition))
-                                }
+                                listener?.onProductClick(getItem(adapterPosition))
                             }
+                        }
+
+                        if (needsMatchParent) {
+                            cvRoot.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                         }
                     }
 
@@ -107,11 +116,6 @@ class ChildAdapter(private val inCartFragment: Boolean) :
         }
     }
 
-    private var onInnerChildProductClickListener: ((Product) -> Unit)? = null
-    fun setOnInnerChildProductClickListener(listener: (Product) -> Unit) {
-        onInnerChildProductClickListener = listener
-    }
-
     private var onCartBodyClickListener: ((Product) -> Unit)? = null
     fun setOnCartBodyClickListener(listener: (Product) -> Unit) {
         onCartBodyClickListener = listener
@@ -131,4 +135,8 @@ class ChildAdapter(private val inCartFragment: Boolean) :
                 oldItem == newItem
         }
     }
+}
+
+interface OnProductItemClickLister {
+    fun onProductClick(product: Product)
 }

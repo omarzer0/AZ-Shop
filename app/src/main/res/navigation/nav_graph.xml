@@ -49,7 +49,7 @@
             android:id="@+id/action_categoryFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
         <argument
-            android:name="categoriesAndNames"
-            app:argType="az.zero.azshop.data.Parent[]" />
+            android:name="position"
+            app:argType="integer" />
     </fragment>
 </navigation>

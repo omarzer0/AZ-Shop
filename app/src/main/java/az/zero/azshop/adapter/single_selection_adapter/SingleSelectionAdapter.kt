@@ -1,12 +1,15 @@
 package az.zero.azshop.adapter.single_selection_adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import az.zero.azshop.data.Product
+import az.zero.azshop.R
 import az.zero.azshop.databinding.ItemSingleSelectionCategoryBinding
+import az.zero.azshop.utils.setLayoutMargin
 
 /**
  * Simple Adapter to handle single selection on RecyclerView
@@ -14,10 +17,12 @@ import az.zero.azshop.databinding.ItemSingleSelectionCategoryBinding
  * for computing diffs between Lists on a background thread,
  * viewBinding, and clickListeners
  * */
-class SingleSelectionAdapter :
-    ListAdapter<Product, SingleSelectionAdapter.ItemViewHolder>(COMPARATOR) {
+class SingleSelectionAdapter(private var lastCheckedPosition: Int = 0) :
+    ListAdapter<String, SingleSelectionAdapter.ItemViewHolder>(COMPARATOR) {
 
-    private var lastCheckedPosition = -1
+    fun setLastCheckedPosition(lastCheckedPosition: Int) {
+        this.lastCheckedPosition = lastCheckedPosition
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemSingleSelectionCategoryBinding.inflate(
@@ -35,45 +40,92 @@ class SingleSelectionAdapter :
 
     inner class ItemViewHolder(private val binding: ItemSingleSelectionCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         // add clickListener in init block to limit the number of clickListeners being instantiated
         init {
             binding.apply {
 
-                // wrap then into click listener
-                onSingleItemUnSelected(binding)
-                notifyItemChanged(lastCheckedPosition)
-                lastCheckedPosition = adapterPosition
-            }
-        }
-
-        fun bind(currentItem: Product) {
-            binding.apply {
-                if (adapterPosition != lastCheckedPosition) {
-                    onSingleItemSelected(binding)
-                } else {
-                    onSingleItemUnSelected(binding)
+                tvSingleCategoryItemName.setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        onSingleItemUnSelected(binding, itemView)
+                        notifyItemChanged(lastCheckedPosition)
+                        lastCheckedPosition = adapterPosition
+                        onCategoryNameClickListener?.let {
+                            it(adapterPosition)
+                        }
+                    }
                 }
             }
         }
+
+        fun bind(currentItem: String) {
+            binding.apply {
+                tvSingleCategoryItemName.text = currentItem
+                if (adapterPosition != lastCheckedPosition) {
+                    onSingleItemSelected(binding, itemView)
+                } else {
+                    onSingleItemUnSelected(binding, itemView)
+                }
+
+                if (adapterPosition == 0) {
+                    setLayoutMargin(itemView.context, root, 100f, 40f, 32f, 16f)
+                }
+
+                if (adapterPosition == itemCount) {
+                    setLayoutMargin(itemView.context, root, 100f, 40f, 0f, 0f)
+
+                }
+                if (adapterPosition != 0 && adapterPosition != itemCount) {
+                    setLayoutMargin(itemView.context, root, 100f, 40f, 0f, 16f)
+                }
+
+            }
+        }
     }
 
-    private fun onSingleItemSelected(binding: ItemSingleSelectionCategoryBinding) = binding.apply {
-
+    private var onCategoryNameClickListener: ((Int) -> Unit)? = null
+    fun setOnCategoryNameClickListener(listener: (Int) -> Unit) {
+        onCategoryNameClickListener = listener
     }
 
-    private fun onSingleItemUnSelected(binding: ItemSingleSelectionCategoryBinding) =
+
+    private fun onSingleItemSelected(binding: ItemSingleSelectionCategoryBinding, itemView: View) =
         binding.apply {
+            clItemCategory.background =
+                ContextCompat.getDrawable(itemView.context, R.drawable.shape_single_selection_white)
 
+            tvSingleCategoryItemName.setTextColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.black
+                )
+            )
+        }
+
+    private fun onSingleItemUnSelected(
+        binding: ItemSingleSelectionCategoryBinding,
+        itemView: View
+    ) =
+        binding.apply {
+            clItemCategory.background = ContextCompat.getDrawable(
+                itemView.context,
+                R.drawable.shape_single_selection_main_color
+            )
+
+            tvSingleCategoryItemName.setTextColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.white
+                )
+            )
         }
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<Product>() {
-            override fun areItemsTheSame(oldItem: Product, newItem: Product) =
-                oldItem.id == newItem.id
+        private val COMPARATOR = object : DiffUtil.ItemCallback<String>() {
+            override fun areItemsTheSame(oldItem: String, newItem: String) =
+                oldItem == newItem
 
 
-            override fun areContentsTheSame(oldItem: Product, newItem: Product) =
+            override fun areContentsTheSame(oldItem: String, newItem: String) =
                 oldItem == newItem
         }
     }
