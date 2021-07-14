@@ -15,7 +15,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import java.lang.String.valueOf
 
-class ChildAdapter(private val inCartFragment: Boolean = false) :
+class ChildAdapter(
+    private val inCartFragment: Boolean = false,
+    private val needsMatchParent: Boolean = false
+) :
     ListAdapter<Product, ChildAdapter.ChildAdapterViewHolder>(COMPARATOR) {
     private var listener: OnProductItemClickLister? = null
 
@@ -52,6 +55,10 @@ class ChildAdapter(private val inCartFragment: Boolean = false) :
                                 listener?.onProductClick(getItem(adapterPosition))
                             }
                         }
+//
+//                        if (needsMatchParent) {
+//                            cvRoot.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+//                        }
                     }
 
                 is ItemCartBinding -> {

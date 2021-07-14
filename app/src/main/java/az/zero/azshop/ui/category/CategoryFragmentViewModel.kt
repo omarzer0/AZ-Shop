@@ -8,5 +8,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryFragmentViewModel @Inject constructor(
     private val productRepository: ProductRepository
-): ViewModel() {
+) : ViewModel() {
+
+    fun getCategoriesName() = productRepository.getFakeCategoryNames()
 }

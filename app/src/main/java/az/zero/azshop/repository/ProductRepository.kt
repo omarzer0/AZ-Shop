@@ -43,4 +43,8 @@ class ProductRepository @Inject constructor(
                 getFakeDataForHomeItemProduct()
             )
         }
+
+    fun getFakeCategoryNames() = List(10) {
+        "item $it"
+    }
 }

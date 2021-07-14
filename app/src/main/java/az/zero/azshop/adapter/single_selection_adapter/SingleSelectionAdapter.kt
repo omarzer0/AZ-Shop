@@ -1,11 +1,13 @@
 package az.zero.azshop.adapter.single_selection_adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import az.zero.azshop.data.Product
+import az.zero.azshop.R
 import az.zero.azshop.databinding.ItemSingleSelectionCategoryBinding
 
 /**
@@ -14,10 +16,8 @@ import az.zero.azshop.databinding.ItemSingleSelectionCategoryBinding
  * for computing diffs between Lists on a background thread,
  * viewBinding, and clickListeners
  * */
-class SingleSelectionAdapter :
-    ListAdapter<Product, SingleSelectionAdapter.ItemViewHolder>(COMPARATOR) {
-
-    private var lastCheckedPosition = -1
+class SingleSelectionAdapter(private var lastCheckedPosition: Int) :
+    ListAdapter<String, SingleSelectionAdapter.ItemViewHolder>(COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemSingleSelectionCategoryBinding.inflate(
@@ -40,40 +40,67 @@ class SingleSelectionAdapter :
         init {
             binding.apply {
 
-                // wrap then into click listener
-                onSingleItemUnSelected(binding)
-                notifyItemChanged(lastCheckedPosition)
-                lastCheckedPosition = adapterPosition
+                tvSingleCategoryItemName.setOnClickListener {
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        onSingleItemUnSelected(binding, itemView)
+                        notifyItemChanged(lastCheckedPosition)
+                        lastCheckedPosition = adapterPosition
+
+                    }
+                }
             }
         }
 
-        fun bind(currentItem: Product) {
+        fun bind(currentItem: String) {
             binding.apply {
+                tvSingleCategoryItemName.text = currentItem
                 if (adapterPosition != lastCheckedPosition) {
-                    onSingleItemSelected(binding)
+                    onSingleItemSelected(binding, itemView)
                 } else {
-                    onSingleItemUnSelected(binding)
+                    onSingleItemUnSelected(binding, itemView)
                 }
             }
         }
     }
 
-    private fun onSingleItemSelected(binding: ItemSingleSelectionCategoryBinding) = binding.apply {
-
-    }
-
-    private fun onSingleItemUnSelected(binding: ItemSingleSelectionCategoryBinding) =
+    private fun onSingleItemSelected(binding: ItemSingleSelectionCategoryBinding, itemView: View) =
         binding.apply {
+            clItemCategory.background =
+                ContextCompat.getDrawable(itemView.context, R.drawable.shape_single_selection_white)
 
+            tvSingleCategoryItemName.setTextColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.black
+                )
+            )
+        }
+
+    private fun onSingleItemUnSelected(
+        binding: ItemSingleSelectionCategoryBinding,
+        itemView: View
+    ) =
+        binding.apply {
+            clItemCategory.background = ContextCompat.getDrawable(
+                itemView.context,
+                R.drawable.shape_single_selection_main_color
+            )
+
+            tvSingleCategoryItemName.setTextColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    R.color.white
+                )
+            )
         }
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<Product>() {
-            override fun areItemsTheSame(oldItem: Product, newItem: Product) =
-                oldItem.id == newItem.id
+        private val COMPARATOR = object : DiffUtil.ItemCallback<String>() {
+            override fun areItemsTheSame(oldItem: String, newItem: String) =
+                oldItem == newItem
 
 
-            override fun areContentsTheSame(oldItem: Product, newItem: Product) =
+            override fun areContentsTheSame(oldItem: String, newItem: String) =
                 oldItem == newItem
         }
     }
