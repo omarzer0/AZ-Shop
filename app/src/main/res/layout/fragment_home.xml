@@ -13,14 +13,6 @@
         android:layout_height="0dp"
         android:background="@color/app_background_color">
 
-        <Button
-            android:id="@+id/btn_open_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="open cart"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/tv_title1"
             android:layout_width="wrap_content"

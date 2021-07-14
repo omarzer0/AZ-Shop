@@ -19,6 +19,10 @@ interface ProductDao {
     @Delete
     suspend fun delete(product: Product)
 
-    @Query("DELETE FROM product_table")
-    suspend fun deleteCompletedTask()
+    @Query("SELECT sum(numberOfItemsInCart) FROM product_table")
+    fun getNumberOfItemsInCart(): Flow<Int>
+
+    @Query("SELECT sum(savedPrice * numberOfItemsInCart) FROM product_table")
+    fun getTotalPrice(): Flow<Double>
+
 }

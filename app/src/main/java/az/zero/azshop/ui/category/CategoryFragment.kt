@@ -22,13 +22,14 @@ class CategoryFragment : BaseFragment(R.layout.fragment_category), OnProductItem
     private val viewModel: CategoryFragmentViewModel by viewModels()
     private lateinit var singleSelectionAdapter: SingleSelectionAdapter
     private lateinit var childAdapter: ChildAdapter
+    private lateinit var binding: FragmentCategoryBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentCategoryBinding.bind(view)
+        binding = FragmentCategoryBinding.bind(view)
 
         initAdapters()
-        bindViews(binding)
+        bindViews()
         submitInitialLists()
         collectEvents()
         setSingleSelectionAdapterListener()
@@ -40,7 +41,7 @@ class CategoryFragment : BaseFragment(R.layout.fragment_category), OnProductItem
         childAdapter.initOnProductItemClickLister(this)
     }
 
-    private fun bindViews(binding: FragmentCategoryBinding) {
+    private fun bindViews() {
         binding.apply {
             setRVs()
         }
@@ -84,7 +85,9 @@ class CategoryFragment : BaseFragment(R.layout.fragment_category), OnProductItem
                     is CategoryEvent.SubmitNewData -> {
                         val products = event.products
                         childAdapter.submitList(products)
-                        childAdapter.notifyDataSetChanged()
+                    }
+                    is CategoryEvent.UpdateTitleTV -> {
+                        binding.tvSelectedCategoryTitle.text = event.title
                     }
                 }.exhaustive
             }

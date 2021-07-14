@@ -2,6 +2,7 @@ package az.zero.azshop.ui.cart
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,27 +17,43 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class CartFragment : BaseFragment(R.layout.fragment_cart) {
     val viewModel: CartViewModel by viewModels()
+    private lateinit var childAdapter: ChildAdapter
+    private lateinit var binding: FragmentCartBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentCartBinding.bind(view)
+        binding = FragmentCartBinding.bind(view)
+        childAdapter = ChildAdapter(true)
 
-        val childAdapter = ChildAdapter(true)
+        bindViews()
+        setObservers()
+        setClickListeners()
+        collectCartEvents()
+    }
+
+    private fun setObservers() {
+        viewModel.getAllProductsInCart().observe(viewLifecycleOwner, {
+            childAdapter.submitList(it)
+            viewModel.receivedEmptyList(it.isEmpty())
+        })
+
+        viewModel.getTotalPrice().observe(viewLifecycleOwner, { totalPrice ->
+            viewModel.onTotalPriceReceived(totalPrice)
+        })
+    }
+
+    private fun setClickListeners() {
+        childAdapter.setOnCartBodyClickListener { viewModel.setOnCartBodyClick(it) }
+        childAdapter.setOnCartDeleteProductClickListener { viewModel.setOnCartDeleteProductClick(it) }
+    }
+
+    private fun bindViews() {
         binding.apply {
             rvCart.apply {
                 adapter = childAdapter
                 setHasFixedSize(true)
             }
         }
-
-        viewModel.getAllProductsInCart().observe(viewLifecycleOwner, {
-            childAdapter.submitList(it)
-        })
-
-        childAdapter.setOnCartBodyClickListener { viewModel.setOnCartBodyClick(it) }
-        childAdapter.setOnCartDeleteProductClickListener { viewModel.setOnCartDeleteProductClick(it) }
-
-        collectCartEvents()
     }
 
     private fun collectCartEvents() {
@@ -50,6 +67,13 @@ class CartFragment : BaseFragment(R.layout.fragment_cart) {
                                 false
                             )
                         findNavController().navigate(action)
+                    }
+                    is CartEvent.ShowOrHideNoItemsInCartImage -> {
+                        binding.ivEmptyCart.isVisible = event.shouldShowImage
+                    }
+                    is CartEvent.ShowButtonTotalText -> {
+                        binding.btnCheckOut.text = "Total: $${event.totalPrice ?: 0}"
+                        binding.btnCheckOut.isVisible = event.totalPrice != null
                     }
                 }.exhaustive
             }

@@ -1,8 +1,12 @@
 package az.zero.azshop.ui.home
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,27 +26,50 @@ import kotlinx.coroutines.flow.collect
 class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLister {
 
     private val viewModel: HomeViewModel by viewModels()
+    private lateinit var forYouAdapter: ChildAdapter
+    private lateinit var offerAdapter: ChildAdapter
+    private lateinit var popularAdapter: ChildAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var binding: FragmentHomeBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentHomeBinding.bind(view)
+        binding = FragmentHomeBinding.bind(view)
 
-        val categoryAdapter = CategoryAdapter()
-        // removed nestedRecyclerView duo to saving RV position and child RVs after navigating
-        val forYouAdapter = ChildAdapter()
-        val offerAdapter = ChildAdapter()
-        val popularAdapter = ChildAdapter()
+        setHasOptionsMenu(true)
+        initAdapters()
+        addAdaptersListener()
+        bindViews()
+//        observeNumberOfItemsInCart(tvNumberOfItemsInCart)
+        submitAdaptersLists(categoryAdapter, forYouAdapter, offerAdapter, popularAdapter)
+        collectProductEvents()
+    }
+//
+//    private fun observeNumberOfItemsInCart(tvNumberOfItemsInCart: TextView) {
+//        viewModel.getNumberOfItemsInCart().observe(viewLifecycleOwner, { numberOfItemsInCart ->
+//            tvNumberOfItemsInCart.text = "$numberOfItemsInCart"
+//            tvNumberOfItemsInCart.isVisible =
+//                (numberOfItemsInCart != null && numberOfItemsInCart > 0)
+//        })
+//    }
+
+    private fun initAdapters() {
+        categoryAdapter = CategoryAdapter()
+        forYouAdapter = ChildAdapter()
+        offerAdapter = ChildAdapter()
+        popularAdapter = ChildAdapter()
+    }
+
+    private fun addAdaptersListener() {
         addListenersToChildAdapters(forYouAdapter, offerAdapter, popularAdapter)
-        addListenerToCategoryAdapter(categoryAdapter)
+        addListenerToCategoryAdapter()
+    }
 
+    private fun bindViews() {
         binding.apply {
 
             setUpRVs(categoryAdapter, forYouAdapter, offerAdapter, popularAdapter)
             addListenersToViewAllTVs(tvForYouViewAll, tvOfferViewAll, tvPopularViewAll)
-            btnOpenCart.setOnClickListener {
-                val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
-                findNavController().navigate(action)
-            }
         }
         submitAdaptersLists(categoryAdapter, forYouAdapter, offerAdapter, popularAdapter)
 
@@ -99,8 +126,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
         }
     }
 
-    private fun addListenerToCategoryAdapter(categoryAdapter: CategoryAdapter) {
-        categoryAdapter.setOnImageCategoryClickLister {position->
+    private fun addListenerToCategoryAdapter() {
+        categoryAdapter.setOnImageCategoryClickLister { position ->
             viewModel.onCategoryClick(position)
         }
     }
@@ -118,7 +145,12 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
                         findNavController().navigate(action)
                     }
                     is HomeFragmentEvent.NavigateToCategoryFragment -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToCategoryFragment(event.position)
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToCategoryFragment(event.position)
+                        findNavController().navigate(action)
+                    }
+                    HomeFragmentEvent.NavigateToCartFragment -> {
+                        val action = HomeFragmentDirections.actionHomeFragmentToCartFragment()
                         findNavController().navigate(action)
                     }
                 }.exhaustive
@@ -128,5 +160,24 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
 
     override fun onProductClick(product: Product) {
         viewModel.onProductClicked(product)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.options_menu, menu)
+
+        val menuItem = menu.findItem(R.id.menu_cart).actionView
+
+        val tvNumberOfItemsInCart: TextView =
+            menuItem.findViewById(R.id.tv_cart_badge_number_of_items)
+
+        viewModel.getNumberOfItemsInCart().observe(viewLifecycleOwner, {
+            tvNumberOfItemsInCart.text = "${it ?: 0}"
+            tvNumberOfItemsInCart.isVisible = it != null && it > 0
+        })
+
+        val flCartImage: FrameLayout = menuItem.findViewById(R.id.fl_root)
+        flCartImage.setOnClickListener {
+            viewModel.cartImageClicked()
+        }
     }
 }

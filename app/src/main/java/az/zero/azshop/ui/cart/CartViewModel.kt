@@ -13,24 +13,36 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
-    private val productRepository: ProductRepository
+    private val cartRepository: ProductRepository
 ) : ViewModel() {
 
     private val cartEventChannel = Channel<CartEvent>()
     val cartEvent = cartEventChannel.receiveAsFlow()
 
 
-    fun getAllProductsInCart() = productRepository.getAllProductsInCart().asLiveData()
+    fun getAllProductsInCart() = cartRepository.getAllProductsInCart().asLiveData()
+
+    fun getTotalPrice() = cartRepository.getTotalPrice().asLiveData()
 
     fun setOnCartBodyClick(product: Product) = viewModelScope.launch {
         cartEventChannel.send(CartEvent.NavigateToDetailsFragmentWithProduct(product))
     }
 
     fun setOnCartDeleteProductClick(product: Product) = viewModelScope.launch {
-        productRepository.deleteProduct(product)
+        cartRepository.deleteProduct(product)
+    }
+
+    fun receivedEmptyList(isEmpty: Boolean) = viewModelScope.launch {
+        cartEventChannel.send(CartEvent.ShowOrHideNoItemsInCartImage(isEmpty))
+    }
+
+    fun onTotalPriceReceived(totalPrice: Double?) = viewModelScope.launch {
+        cartEventChannel.send(CartEvent.ShowButtonTotalText(totalPrice))
     }
 }
 
 sealed class CartEvent {
     data class NavigateToDetailsFragmentWithProduct(val product: Product) : CartEvent()
+    data class ShowOrHideNoItemsInCartImage(val shouldShowImage: Boolean) : CartEvent()
+    data class ShowButtonTotalText(val totalPrice: Double?) : CartEvent()
 }

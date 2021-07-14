@@ -16,14 +16,15 @@ class ProductRepository @Inject constructor(
     suspend fun updateProduct(product: Product) = dao.update(product)
     suspend fun deleteProduct(product: Product) = dao.delete(product)
 
-    // TODO 2: use custom application scope to run delete all (to insure not interruption)
+    fun getNumberOfItemsInCart() = dao.getNumberOfItemsInCart()
+    fun getTotalPrice() = dao.getTotalPrice()
 
     fun getFakeDataForHomeItemCategory(): List<Category> =
         List(10) {
             Category("Item $it", R.drawable.lavender)
         }
 
-    fun getFakeDataForHomeItemProduct(position :Int): List<Product> =
+    fun getFakeDataForHomeItemProduct(position: Int): List<Product> =
         List(10) {
             Product(
                 "Item $it $position$position$position",

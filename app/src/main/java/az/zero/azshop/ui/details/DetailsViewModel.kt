@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val productRepository: ProductRepository,
+    private val detailsRepository: ProductRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
     private val detailsEventChannel = Channel<DetailFragmentEvent>()
@@ -55,7 +55,7 @@ class DetailsViewModel @Inject constructor(
             state.set(CATEGORY, value)
         }
 
-    var price = state.get<Double>(PRICE) ?: product?.price ?: 0.0
+    var price = state.get<Double>(PRICE) ?: product?.originalPrice ?: 0.0
         set(value) {
             field = value
             state.set(PRICE, value)
@@ -77,11 +77,11 @@ class DetailsViewModel @Inject constructor(
     val numberOfItemsInCartObserver = MutableLiveData(numberOfItemsInCart)
 
     private fun insertProduct(product: Product) = viewModelScope.launch {
-        productRepository.insertProduct(product)
+        detailsRepository.insertProduct(product)
     }
 
     private fun updateProduct(product: Product) = viewModelScope.launch {
-        productRepository.updateProduct(product)
+        detailsRepository.updateProduct(product)
     }
 
     fun onPlusBtnClick() {

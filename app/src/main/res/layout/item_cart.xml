@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:textColor="@color/main_color"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_number_of_items_in_cart"

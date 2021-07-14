@@ -12,8 +12,9 @@ data class Product(
     val description: String,
     val image: Int,
     val category: String,
-    val price: Double,
+    val originalPrice: Double,
     val offerPrice: Double = 0.0,
+    val savedPrice: Double = if (offerPrice > 0.0) offerPrice else originalPrice,
     var numberOfItemsInCart: Int = 1,
     var created: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
