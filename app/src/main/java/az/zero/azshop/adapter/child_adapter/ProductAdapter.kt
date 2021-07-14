@@ -86,11 +86,12 @@ class ChildAdapter(
                         tvProductItemName.text = currentItem.name
 
                         val offerPrice = currentItem.offerPrice
-                        tvProductItemPrice.isVisible = offerPrice == 0.0
                         tvProductItemPrice.text = valueOf("$${currentItem.originalPrice}")
-
-                        tvOfferPrice.isVisible = offerPrice != 0.0
+                        tvProductItemPrice.paint.isStrikeThruText = offerPrice > 0.0
+                        
                         tvOfferPrice.text = valueOf("$$offerPrice")
+                        tvOfferPrice.isVisible = offerPrice > 0.0
+
 
                         Glide.with(itemView).load(currentItem.image).error(R.drawable.ic_no_image)
                             .transition(DrawableTransitionOptions.withCrossFade())
