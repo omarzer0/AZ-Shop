@@ -55,10 +55,10 @@ class ChildAdapter(
                                 listener?.onProductClick(getItem(adapterPosition))
                             }
                         }
-//
-//                        if (needsMatchParent) {
-//                            cvRoot.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-//                        }
+
+                        if (needsMatchParent) {
+                            cvRoot.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                        }
                     }
 
                 is ItemCartBinding -> {

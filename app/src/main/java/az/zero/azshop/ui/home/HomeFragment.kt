@@ -32,7 +32,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
         val forYouAdapter = ChildAdapter()
         val offerAdapter = ChildAdapter()
         val popularAdapter = ChildAdapter()
-        addListenersToAdapters(forYouAdapter, offerAdapter, popularAdapter)
+        addListenersToChildAdapters(forYouAdapter, offerAdapter, popularAdapter)
+        addListenerToCategoryAdapter(categoryAdapter)
 
         binding.apply {
 
@@ -46,20 +47,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
         submitAdaptersLists(categoryAdapter, forYouAdapter, offerAdapter, popularAdapter)
 
         collectProductEvents()
-        forYouAdapter.setOnCartBodyClickListener {
-
-        }
     }
 
     private fun addListenersToViewAllTVs(vararg tvs: TextView) {
         for (tv in tvs) {
             tv.setOnClickListener {
-                viewModel.onViewAllClick()
+                viewModel.onViewAllClick(0)
             }
         }
     }
 
-    private fun addListenersToAdapters(vararg adapters: ChildAdapter) {
+    private fun addListenersToChildAdapters(vararg adapters: ChildAdapter) {
         for (adapter in adapters) {
             adapter.initOnProductItemClickLister(this)
         }
@@ -101,12 +99,17 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
         }
     }
 
+    private fun addListenerToCategoryAdapter(categoryAdapter: CategoryAdapter) {
+        categoryAdapter.setOnImageCategoryClickLister {position->
+            viewModel.onCategoryClick(position)
+        }
+    }
 
     private fun collectProductEvents() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.productEvent.collect { event ->
                 when (event) {
-                    is ProductEvent.NavigateToDetailsFragmentWithProduct -> {
+                    is HomeFragmentEvent.NavigateToDetailsFragmentWithHomeFragment -> {
                         val action =
                             HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
                                 event.product,
@@ -114,8 +117,8 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
                             )
                         findNavController().navigate(action)
                     }
-                    is ProductEvent.NavigateToCategoryFragmentWithListCategoryAndNames -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToCategoryFragment()
+                    is HomeFragmentEvent.NavigateToCategoryFragment -> {
+                        val action = HomeFragmentDirections.actionHomeFragmentToCategoryFragment(event.position)
                         findNavController().navigate(action)
                     }
                 }.exhaustive
@@ -124,6 +127,6 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
     }
 
     override fun onProductClick(product: Product) {
-        viewModel.onProductSelected(product)
+        viewModel.onProductClicked(product)
     }
 }

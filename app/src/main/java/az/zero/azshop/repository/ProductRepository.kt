@@ -2,7 +2,6 @@ package az.zero.azshop.repository
 
 import az.zero.azshop.R
 import az.zero.azshop.data.Category
-import az.zero.azshop.data.Parent
 import az.zero.azshop.data.Product
 import az.zero.azshop.dp.ProductDao
 import javax.inject.Inject
@@ -20,14 +19,14 @@ class ProductRepository @Inject constructor(
     // TODO 2: use custom application scope to run delete all (to insure not interruption)
 
     fun getFakeDataForHomeItemCategory(): List<Category> =
-        List(100) {
+        List(10) {
             Category("Item $it", R.drawable.lavender)
         }
 
-    fun getFakeDataForHomeItemProduct(): List<Product> =
-        List(100) {
+    fun getFakeDataForHomeItemProduct(position :Int): List<Product> =
+        List(10) {
             Product(
-                "Item $it",
+                "Item $it $position$position$position",
                 "this is description",
                 R.drawable.lavender,
                 "fruits",
@@ -36,15 +35,7 @@ class ProductRepository @Inject constructor(
             )
         }
 
-    fun getFakeDataForHomeParentItemProduct(): List<Parent> =
-        List(10) {
-            Parent(
-                "Item $it",
-                getFakeDataForHomeItemProduct()
-            )
-        }
-
-    fun getFakeCategoryNames() = List(10) {
-        "item $it"
+    fun getFakeCategoryNames(): List<String> = getFakeDataForHomeItemCategory().map {
+        it.name
     }
 }

@@ -1,6 +1,5 @@
 package az.zero.azshop.adapter.category_adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +9,7 @@ import az.zero.azshop.data.Category
 import az.zero.azshop.databinding.ItemCategoryBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import kotlin.math.log
+
 
 class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(COMPARATOR) {
 
@@ -32,6 +31,10 @@ class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder
         RecyclerView.ViewHolder(binding.root) {
 
         init {
+            binding.root.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION)
+                    onImageCategoryClickLister?.let { it(adapterPosition) }
+            }
         }
 
         fun bind(currentItem: Category) {
@@ -42,6 +45,11 @@ class CategoryAdapter : ListAdapter<Category, CategoryAdapter.CategoryViewHolder
                     .into(ivCategoryItemImage)
             }
         }
+    }
+
+    private var onImageCategoryClickLister: ((Int) -> Unit)? = null
+    fun setOnImageCategoryClickLister(listener: (Int) -> Unit) {
+        onImageCategoryClickLister = listener
     }
 
     companion object {
