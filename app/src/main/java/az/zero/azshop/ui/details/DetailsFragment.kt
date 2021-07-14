@@ -3,7 +3,6 @@ package az.zero.azshop.ui.details
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,24 +18,20 @@ import kotlinx.coroutines.flow.collect
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment(R.layout.fragment_datails) {
     private val viewModel: DetailsViewModel by viewModels()
-    private lateinit var binding: FragmentDatailsBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentDatailsBinding.bind(view)
+        val binding = FragmentDatailsBinding.bind(view)
 
-        bindViews(binding)
-        observeNumberOdItems(binding)
-        collectDetailsEvents()
-    }
-
-    private fun bindViews(binding: FragmentDatailsBinding) {
         binding.apply {
             populateViews()
             btnPlus.setOnClickListener { viewModel.onPlusBtnClick() }
             btnMinus.setOnClickListener { viewModel.onMinusBtnClick() }
             btnAddToCart.setOnClickListener { viewModel.onAddOrEditProductToCartClick() }
         }
+
+        observeNumberOdItems(binding)
+        collectDetailsEvents()
     }
 
     private fun observeNumberOdItems(binding: FragmentDatailsBinding) {
@@ -47,12 +42,8 @@ class DetailsFragment : BaseFragment(R.layout.fragment_datails) {
 
     private fun FragmentDatailsBinding.populateViews() {
         tvProductName.text = viewModel.name
-
         tvPrice.text = "$${viewModel.price}"
-        tvPrice.paint.isStrikeThruText = viewModel.offerPrice > 0.0
         tvOfferPrice.text = "$${viewModel.offerPrice}"
-        tvOfferPrice.isVisible = viewModel.offerPrice > 0.0
-
         Glide.with(requireContext()).load(viewModel.image).into(ivProductImg)
         tvDescription.text = viewModel.description
         tvQuantity.text = "${viewModel.numberOfItemsInCart}"
