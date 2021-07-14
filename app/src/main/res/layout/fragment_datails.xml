@@ -60,7 +60,7 @@
 
             <Button
                 android:id="@+id/btn_plus"
-                android:layout_width="25dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/shape_left_side_cornered"
@@ -80,7 +80,7 @@
 
             <Button
                 android:id="@+id/btn_minus"
-                android:layout_width="25dp"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/shape_right_side_cornered"

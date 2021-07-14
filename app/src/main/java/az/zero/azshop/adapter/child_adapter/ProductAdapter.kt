@@ -87,7 +87,7 @@ class ChildAdapter(
 
                         val offerPrice = currentItem.offerPrice
                         tvProductItemPrice.isVisible = offerPrice == 0.0
-                        tvProductItemPrice.text = valueOf("$${currentItem.price}")
+                        tvProductItemPrice.text = valueOf("$${currentItem.originalPrice}")
 
                         tvOfferPrice.isVisible = offerPrice != 0.0
                         tvOfferPrice.text = valueOf("$$offerPrice")
@@ -104,7 +104,7 @@ class ChildAdapter(
 
                         val offerPrice = currentItem.offerPrice
                         tvProductItemPrice.isVisible = offerPrice == 0.0
-                        tvProductItemPrice.text = valueOf("$${currentItem.price}")
+                        tvProductItemPrice.text = valueOf("$${currentItem.originalPrice}")
 
                         tvOfferPrice.isVisible = offerPrice != 0.0
                         tvOfferPrice.text = valueOf("$$offerPrice")

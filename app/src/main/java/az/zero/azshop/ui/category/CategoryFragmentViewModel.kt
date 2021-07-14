@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryFragmentViewModel @Inject constructor(
-    private val productRepository: ProductRepository,
+    private val categoryRepository: ProductRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
 
@@ -27,8 +27,14 @@ class CategoryFragmentViewModel @Inject constructor(
     private val categoryEventChannel = Channel<CategoryEvent>()
     val categoryEvent = categoryEventChannel.receiveAsFlow()
 
-    fun getCategoriesName() = productRepository.getFakeCategoryNames()
-    fun getFakeDataForHomeItemProduct(position:Int) = productRepository.getFakeDataForHomeItemProduct(position)
+    fun getCategoriesName() = categoryRepository.getFakeCategoryNames()
+    fun getFakeDataForHomeItemProduct(position: Int): List<Product> {
+        viewModelScope.launch {
+            categoryEventChannel.send(CategoryEvent.UpdateTitleTV(getCategoriesName()[position]))
+        }
+        return categoryRepository.getFakeDataForHomeItemProduct(position)
+    }
+
     fun onProductItemClicked(product: Product) = viewModelScope.launch {
         categoryEventChannel.send(CategoryEvent.NavigateToDetailsFragmentWithProduct(product))
     }
@@ -42,4 +48,5 @@ class CategoryFragmentViewModel @Inject constructor(
 sealed class CategoryEvent {
     data class NavigateToDetailsFragmentWithProduct(val product: Product) : CategoryEvent()
     data class SubmitNewData(val products: List<Product>) : CategoryEvent()
+    data class UpdateTitleTV(val title: String) : CategoryEvent()
 }

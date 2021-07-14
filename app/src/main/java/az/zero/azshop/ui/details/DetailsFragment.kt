@@ -1,5 +1,6 @@
 package az.zero.azshop.ui.details
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,6 +13,7 @@ import az.zero.azshop.utils.exhaustive
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+
 
 @AndroidEntryPoint
 class DetailsFragment : BaseFragment(R.layout.fragment_datails) {
@@ -57,5 +59,15 @@ class DetailsFragment : BaseFragment(R.layout.fragment_datails) {
                 }.exhaustive
             }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        enterFullScreen()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        exitFullScreen()
     }
 }
