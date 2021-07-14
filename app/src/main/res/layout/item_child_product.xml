@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cv_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginTop="8dp"
+    android:id="@+id/cv_root"
+    android:layout_marginBottom="8dp"
+    android:layout_marginStart="16dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_item_product"
@@ -17,7 +17,8 @@
         app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <ImageView
             android:id="@+id/iv_product_item_image"
@@ -49,9 +50,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:textColor="@color/main_color"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tv_offer_price"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/tv_product_item_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_product_item_name"
         tools:text="$22.65" />
@@ -60,10 +64,16 @@
         android:id="@+id/tv_offer_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAlignment="textEnd"
         android:textColor="@color/discount_text_color"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold"
+        tools:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/tv_product_item_name"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_product_item_price"
         app:layout_constraintTop_toTopOf="@+id/tv_product_item_price"
         tools:text="$14.20" />
 

@@ -44,12 +44,6 @@ class HomeViewModel @Inject constructor(
     fun cartImageClicked() = viewModelScope.launch {
         productEventChannel.send(HomeFragmentEvent.NavigateToCartFragment)
     }
-
-    fun getForYouData() = homeRepository.getForYou()
-
-    fun getOfferData() = homeRepository.getOffers()
-
-    fun getPopularData() = homeRepository.getPopular()
 }
 
 sealed class HomeFragmentEvent {
