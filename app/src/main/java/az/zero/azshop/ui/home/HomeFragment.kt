@@ -1,5 +1,6 @@
 package az.zero.azshop.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,6 +10,8 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.ActivityNavigator
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import az.zero.azshop.R
 import az.zero.azshop.adapter.category_adapter.CategoryAdapter
@@ -17,6 +20,7 @@ import az.zero.azshop.adapter.child_adapter.OnProductItemClickLister
 import az.zero.azshop.data.Product
 import az.zero.azshop.databinding.FragmentHomeBinding
 import az.zero.azshop.ui.BaseFragment
+import az.zero.azshop.ui.details.DetailsActivity
 import az.zero.azshop.utils.exhaustive
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -128,12 +132,15 @@ class HomeFragment : BaseFragment(R.layout.fragment_home), OnProductItemClickLis
             viewModel.productEvent.collect { event ->
                 when (event) {
                     is HomeFragmentEvent.NavigateToDetailsFragmentWithHomeFragment -> {
-                        val action =
-                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
-                                event.product,
-                                true
-                            )
-                        findNavController().navigate(action)
+//                        val action =
+//                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+//                                event.product,
+//                                true
+//                            )
+//                        findNavController().navigate(action)
+
+                        findNavController().navigate(R.id.detailsActivity)
+
                     }
                     is HomeFragmentEvent.NavigateToCategoryFragment -> {
                         val action =

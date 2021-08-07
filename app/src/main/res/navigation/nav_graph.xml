@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/detailsActivity" />
         <action
             android:id="@+id/action_homeFragment_to_categoryFragment"
             app:destination="@id/categoryFragment" />
@@ -53,4 +53,9 @@
             android:name="position"
             app:argType="integer" />
     </fragment>
+    <activity
+        android:id="@+id/detailsActivity"
+        android:name="az.zero.azshop.ui.details.DetailsActivity"
+        android:label="activity_datails"
+        tools:layout="@layout/activity_datails" />
 </navigation>
