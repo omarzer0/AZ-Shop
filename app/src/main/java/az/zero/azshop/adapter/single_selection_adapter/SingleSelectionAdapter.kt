@@ -63,16 +63,16 @@ class SingleSelectionAdapter(private var lastCheckedPosition: Int = 0) :
                 }
 
                 if (adapterPosition == 0) {
-                    setLayoutMargin(itemView.context, root, 100f, 40f, 32f, 16f)
+                    setLayoutMargin(itemView.context, root, 100f, 40f, 16f, 16f)
                 }
-
-                if (adapterPosition == itemCount - 1) {
-                    setLayoutMargin(itemView.context, root, 100f, 40f, 0f, 32f)
-
-                }
-                if (adapterPosition != 0 && adapterPosition != itemCount - 1) {
-                    setLayoutMargin(itemView.context, root, 100f, 40f, 0f, 16f)
-                }
+//
+//                if (adapterPosition == itemCount - 1) {
+//                    setLayoutMargin(itemView.context, root, 100f, 40f, 0f, 32f)
+//
+//                }
+//                if (adapterPosition != 0 && adapterPosition != itemCount - 1) {
+//                    setLayoutMargin(itemView.context, root, 100f, 40f, 0f, 16f)
+//                }
 
             }
         }

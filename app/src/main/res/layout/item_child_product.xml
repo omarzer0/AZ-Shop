@@ -52,6 +52,7 @@
         android:textColor="@color/main_color"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="@+id/tv_product_item_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_product_item_name"
         tools:text="$22.65" />
@@ -63,9 +64,19 @@
         android:textColor="@color/discount_text_color"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:gravity="end"
+        android:layout_marginEnd="2dp"
         app:layout_constraintEnd_toEndOf="@+id/tv_product_item_name"
+        app:layout_constraintStart_toEndOf="@+id/tv_product_item_price"
         app:layout_constraintTop_toTopOf="@+id/tv_product_item_price"
         tools:text="$14.20" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
